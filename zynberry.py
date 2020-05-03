@@ -43,6 +43,8 @@ eventDispatcher.onLeftUp += leftUp
 appModel.onChangeView += guiChange
 appModel.onChangePreset += sinthChange
 
+guiRenderControl.render(appModel)
+
 try:
     time.sleep(20000000)
 except KeyboardInterrupt:  

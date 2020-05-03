@@ -8,6 +8,8 @@ import os
 
 from PIL import ImageFont
 
+CONTRAST = 50
+
 class GuiControl:
     
     def __init__(self):
@@ -15,6 +17,7 @@ class GuiControl:
         #oled I2C
         serial = i2c(port=1, address=0x3C)
         self.device = sh1106(serial)
+        self.device.contrast(CONTRAST)
 
         #icon codes
         self.iconCodeLibrary = {

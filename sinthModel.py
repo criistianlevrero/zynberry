@@ -24,8 +24,6 @@ class SinthModel(Events):
                 'view' : 'programSelector'
             }
         }
-        self.onChangeView(self)
-        self.onLoadProgram(self.__pcGetPartsModel())
     
     def __initializeParts(self, numberOfPats):
         parts = []
@@ -52,7 +50,9 @@ class SinthModel(Events):
     
     def __loadPresets (self, path):
         presetsPath = BASE_PATH + path
-        return sorted(os.listdir(presetsPath))
+        presetsList = sorted(os.listdir(presetsPath))
+        filteredPresets = [x for x in presetsList if not x.startswith('.')]
+        return (filteredPresets)
     
     def getCurrentViewModel(self):
         for model in self.appModel:
@@ -99,6 +99,8 @@ class SinthModel(Events):
         current = currentBankPreset[bankPreset]
         listLenght = len(current['options'])
         current['selected'] = (current['selected'] + positions) % listLenght
+        self.__cpReloadPresetList()
+        self.__cpProgramChangedEvent()
         self.onChangeView(self)
         return current['selected']
     
@@ -107,13 +109,9 @@ class SinthModel(Events):
         self.pcGetCurrentPartModel()['preset']['options'] = self.__loadPresets(bank)
 
     def cpBankPrev(self):
-        self.__cpReloadPresetList()
-        self.__cpProgramChangedEvent()
         return self.__pcBankPresetNextPrev('bank', -1)
     
     def cpBankNext(self):
-        self.__cpReloadPresetList()
-        self.__cpProgramChangedEvent()
         return self.__pcBankPresetNextPrev('bank', 1)
     
     def cpPresetPrev(self):
