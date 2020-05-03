@@ -39,18 +39,25 @@ class GuiControl:
 
     def render(self, viewModel):
 
+        partModel = viewModel.pcGetCurrentPartModel()
+        partSelectorModel = viewModel.pcGetPartSelectorModel()
+
         with canvas(self.device) as draw:
 
             draw.rectangle(self.device.bounding_box, outline="white", fill="black")
 
-            #path
-            self.renderBullet((5, 10), viewModel['path']['active'], draw)
-            draw.text((15, 10), str(viewModel['path']['options'][viewModel['path']['selected']]), fill="white")
+            #bank
+            self.renderBullet((5, 5), partModel['bank']['active'], draw)
+            draw.text((15, 5), str(partModel['bank']['options'][partModel['bank']['selected']]), fill="white")
 
             #preset
-            self.renderBullet((5, 25), viewModel['preset']['active'], draw)
-            draw.text((15, 25), str(viewModel['preset']['options'][viewModel['preset']['selected']]), fill="white")
+            self.renderBullet((5, 20), partModel['preset']['active'], draw)
+            draw.text((15, 20), str(partModel['preset']['options'][partModel['preset']['selected']]), fill="white")
 
             #part
-            self.renderBullet((5, 40), viewModel['part']['active'], draw)
-            draw.text((15, 40), str(viewModel['part']['options'][viewModel['part']['selected']]), fill="white")
+            draw.text((5, 38), "Parte:" + str(partSelectorModel['selected'] + 1), fill="white")
+            pos = 5
+            for part in partSelectorModel['options']:
+                partBullet = part == partSelectorModel['selected']
+                self.renderBullet((pos, 49), partBullet, draw)
+                pos += 10
